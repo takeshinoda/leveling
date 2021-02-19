@@ -37,8 +37,6 @@ func (w *Writer) Write(p []byte) (int, error) {
 	remaining := p
 	total := 0
 	for {
-		r := w.limiter.Reserve()
-
 		if len(remaining) <= w.onceWriteSize {
 			n, err := w.writer.Write(remaining)
 			return n+total, err
@@ -49,10 +47,9 @@ func (w *Writer) Write(p []byte) (int, error) {
 		if err != nil {
 			return total, err
 		}
+		time.Sleep(w.limiter.Reserve().Delay())
 
 		total += n
 		remaining = remaining[n:]
-
-		time.Sleep(r.Delay())
 	}
 }
