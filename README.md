@@ -29,7 +29,7 @@ you can create leveling writer object such as the follow:
 
 ## Author
 
-takeshinoda (Taekshi Shinoda)
+takeshinoda (Takeshi Shinoda)
 
 ## License
 

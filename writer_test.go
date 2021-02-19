@@ -60,10 +60,10 @@ func TestWriter_Write(t *testing.T) {
 		for i, timestamp := range recorder.timestamps[1:] {
 			diff := timestamp.Sub(previous)
 			if diff < min {
-				t.Errorf("The %dst times write interval is too short = %s, expected: %s", i+1, diff, interval)
+				t.Errorf("The %d times write interval is too short = %s, expected: >= %s", i+1, diff, min)
 			}
 			if diff > max {
-				t.Errorf("The %dst times write interval is too long = %s, expected: %s", i+1, diff, interval)
+				t.Errorf("The %d times write interval is too long = %s, expected: <= %s", i+1, diff, max)
 			}
 			previous = timestamp
 		}
