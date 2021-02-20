@@ -3,25 +3,21 @@ package leveling
 import (
 	"io"
 	"time"
-
-	"golang.org/x/time/rate"
 )
 
 type Writer struct {
 	writer io.Writer
 	onceWriteSize int
-	limiter *rate.Limiter
+	interval time.Duration
 }
 
 var _ io.Writer = (*Writer)(nil)
 
 func New(writer io.Writer, interval time.Duration, onceWriteSize int) *Writer {
-	limiter := rate.NewLimiter(rate.Every(interval), 1)
-
 	return &Writer{
 		writer:     writer,
 		onceWriteSize: onceWriteSize,
-		limiter: limiter,
+		interval: interval,
 	}
 }
 
@@ -32,10 +28,11 @@ func NewTimesPerSecond(writer io.Writer, secSplitNum int, bytesPerSecond int ) *
 }
 
 func (w *Writer) Write(p []byte) (int, error) {
-	_ = w.limiter.Reserve()
-
 	remaining := p
 	total := 0
+
+	latest := time.Now()
+	sleepOverhead := time.Duration(0)
 	for {
 		if len(remaining) <= w.onceWriteSize {
 			n, err := w.writer.Write(remaining)
@@ -47,7 +44,12 @@ func (w *Writer) Write(p []byte) (int, error) {
 		if err != nil {
 			return total, err
 		}
-		time.Sleep(w.limiter.Reserve().Delay())
+
+		sleptAt := time.Now()
+		wait := w.interval - sleptAt.Sub(latest) - sleepOverhead
+		time.Sleep(wait)
+		latest = time.Now()
+		sleepOverhead = latest.Sub(sleptAt) - wait
 
 		total += n
 		remaining = remaining[n:]
