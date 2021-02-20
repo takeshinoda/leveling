@@ -21,12 +21,6 @@ func New(writer io.Writer, interval time.Duration, onceWriteSize int) *Writer {
 	}
 }
 
-func NewTimesPerSecond(writer io.Writer, secSplitNum int, bytesPerSecond int ) *Writer {
-	interval := time.Second / time.Duration(secSplitNum)
-	onceWriteSize := bytesPerSecond / secSplitNum
-	return New(writer, interval, onceWriteSize)
-}
-
 func (w *Writer) Write(p []byte) (int, error) {
 	remaining := p
 	total := 0

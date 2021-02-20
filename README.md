@@ -20,13 +20,6 @@ you can create leveling writer object such as the follow:
     writer := leveling.New(someWriter, 10 * time.Millisecond, 10 * 1024)
 ```
 
-As the another way, if you want to send the 10KB of byte slice 10 times per seconds, 
-you can create leveling writer object such as the follow:
-
-```go
-    writer := leveling.NewTimesPerSecond(someWriter, 10, 10 * 1024)
-````
-
 ## Author
 
 takeshinoda (Takeshi Shinoda)

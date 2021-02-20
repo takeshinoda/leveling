@@ -5,19 +5,6 @@ import (
 	"time"
 )
 
-func TestNewSplitSecond(t *testing.T) {
-	actual := NewTimesPerSecond(nil, 10, 10000)
-	expected := Writer{
-		writer:        nil,
-		onceWriteSize: 1000,
-		interval:       time.Second / time.Duration(10),
-	}
-
-	if actual.onceWriteSize != expected.onceWriteSize || actual.interval != expected.interval {
-		t.Errorf("It returns an unexpected writer: %v, expected %v", actual, expected)
-	}
-}
-
 type recordWriter struct {
 	eachByBytes [][]byte
 	timestamps []time.Time
@@ -33,7 +20,7 @@ func TestWriter_Write(t *testing.T) {
 	t.Run("Writing is done at regular intervals.", func(t *testing.T) {
 		recorder := &recordWriter{}
 		splitNum := 10
-		writer := NewTimesPerSecond(recorder, splitNum, 10000)
+		writer := New(recorder, time.Second / time.Duration(splitNum), 1000)
 		data := make([]byte, 100000)
 
 		n, err := writer.Write(data)
