@@ -1,7 +1,7 @@
 
 # Overview
 
-This writer levels the flow rate per second.
+This writer levels the flow rate.
 
 # Using leveling
 
