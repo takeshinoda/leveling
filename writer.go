@@ -13,7 +13,7 @@ type Writer struct {
 
 var _ io.Writer = (*Writer)(nil)
 
-func New(writer io.Writer, interval time.Duration, onceWriteSize int) *Writer {
+func NewWriter(writer io.Writer, interval time.Duration, onceWriteSize int) *Writer {
 	return &Writer{
 		writer:     writer,
 		onceWriteSize: onceWriteSize,

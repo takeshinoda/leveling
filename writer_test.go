@@ -20,7 +20,7 @@ func TestWriter_Write(t *testing.T) {
 	t.Run("Writing is done at regular intervals.", func(t *testing.T) {
 		recorder := &recordWriter{}
 		splitNum := 10
-		writer := New(recorder, time.Second / time.Duration(splitNum), 1000)
+		writer := NewWriter(recorder, time.Second / time.Duration(splitNum), 1000)
 		data := make([]byte, 100000)
 
 		n, err := writer.Write(data)
